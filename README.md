@@ -1,10 +1,11 @@
-**For a full waiver of 2Checkout's $49 signup fee, enter promo code:  GIT2CO  during signup.**
+### _For a full waiver of 2Checkout's $49 signup fee, enter promo code:  GIT2CO  during signup._
 
-How to integrate Zen Cart with 2Checkout
+Integrate Zen Cart with 2Checkout
+----------------------------------------
 
-Zen Cart Settings:
-1. Download the 2Checkout payment module at: www.zen-cart.com/index.php?main_page=product_contrib_info&products_id=180
-2. Follow the instructions included in the extension and upload to your ZenCart directory
+### Zen Cart Settings:
+1. Clone or download and extract
+2. Upload to your ZenCart directory
 3. Run the database_update.sql file on your ZenCart database
 4. Sign in to your ZenCart admin
 5. Click Modules
@@ -14,14 +15,13 @@ Zen Cart Settings:
 9. Enter 2Checkout account number
 10. Click Save Changes
 
-2Checkout Settings:
+### 2Checkout Settings:
 1. Sign in to your 2Checkout account
 2. Click the Account tab and Site Management subcategory
 3. Under Direct Return select Immediately returned to my Website
 4. Enter your Secret Word (Must be the same value entered in your ZenCart admin.)
 5. Click Save Changes
 
-For more information visit: Zen-Cart.com
 Please contact 2Checkout directly with any integration questions.
 
-This contribution is ofcourse GNU, and used at your own risk..and so on..... ;-)
+_This contribution is ofcourse GNU, and used at your own risk..and so on..... ;-)_
