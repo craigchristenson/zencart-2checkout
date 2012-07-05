@@ -280,7 +280,9 @@
     function install() {
     global $db;
 
-        $db->Execute("CREATE TABLE `2checkout` (
+        define('TABLE_2CHECKOUT', DB_PREFIX.'2checkout');
+
+        $db->Execute("CREATE TABLE " . TABLE_2CHECKOUT . " (
         `2co_id` int(11) NOT NULL auto_increment,
         `start_time` datetime NOT NULL default '0000-00-00 00:00:00',
         `finish_time` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -312,8 +314,10 @@
 
     function remove() {
 	global $db;
+
+       define('TABLE_2CHECKOUT', DB_PREFIX.'2checkout');
        $db->Execute("delete from " . TABLE_CONFIGURATION . " where configuration_key in ('" . implode("', '", $this->keys()) . "')");
-       $db->Execute("DROP TABLE IF EXISTS `2checkout`" );
+       $db->Execute("DROP TABLE IF EXISTS ". TABLE_2CHECKOUT );
    }
 
 ////////////////////////////////////////////////////
