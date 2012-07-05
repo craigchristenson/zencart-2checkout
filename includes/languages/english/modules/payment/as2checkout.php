@@ -4,9 +4,9 @@
 // |zen-cart Open Source E-commerce                                       |
 // +----------------------------------------------------------------------+
 // | Copyright (c) 2003 The zen-cart developers                           |
-// |                                                                      |   
-// | http://www.zen-cart.com/index.php                                    |   
-// |                                                                      |   
+// |                                                                      |
+// | http://www.zen-cart.com/index.php                                    |
+// |                                                                      |
 // | Portions Copyright (c) 2003 osCommerce                               |
 // +----------------------------------------------------------------------+
 // | This source file is subject to version 2.0 of the GPL license,       |
@@ -20,7 +20,7 @@
 // $Id: pm2checkout.php,v 1.1 2003/11/25 17:09:07 wilt Exp $
 //
 
-  define('MODULE_PAYMENT_2CHECKOUT_TEXT_TITLE', '2CheckOut');
+  define('MODULE_PAYMENT_2CHECKOUT_TEXT_TITLE', '2Checkout (Pay by Credit Card/Debit Card/PayPal)');
   define('MODULE_PAYMENT_2CHECKOUT_TEXT_DESCRIPTION', 'This module has been designed to work with the latest 2checkout procedure.');
   define('MODULE_PAYMENT_2CHECKOUT_TEXT_TYPE', 'Type:');
   define('MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_OWNER', 'Credit Card Owner:');

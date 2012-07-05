@@ -6,14 +6,13 @@ Integrate Zen Cart with 2Checkout
 ### Zen Cart Settings:
 1. Clone or download and extract
 2. Upload to your ZenCart directory
-3. Run the database_update.sql file on your ZenCart database
-4. Sign in to your ZenCart admin
-5. Click Modules
-6. Click Payment
-7. Click Install on 2Checkout
-8. Enter Secret Word (set on 2Checkout site management page)
-9. Enter 2Checkout account number
-10. Click Save Changes
+3. Sign in to your ZenCart admin
+4. Click Modules
+5. Click Payment
+6. Click Install on 2Checkout
+7. Enter Secret Word (set on 2Checkout site management page)
+8. Enter 2Checkout account number
+9. Click Save Changes
 
 ### 2Checkout Settings:
 1. Sign in to your 2Checkout account
