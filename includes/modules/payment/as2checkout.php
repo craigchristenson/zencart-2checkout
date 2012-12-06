@@ -157,7 +157,7 @@ class as2checkout extends base {
                 $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i + 1) . '_tangible', (zen_get_products_virtual($products[$i]['id']) == true ? 'N' : 'Y'));
             }
             //shipping
-            if ($order->info['shipping_method']) {
+            if ($order->info['shipping_method'] && $order->info['shipping_cost'] > 0) {
                 $i++;
                 $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_type', 'shipping');
                 $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_name', $order->info['shipping_method']);
