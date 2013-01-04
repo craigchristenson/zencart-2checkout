@@ -18,7 +18,7 @@
 // | license@zen-cart.com so we can mail you a copy immediately.          |
 // +----------------------------------------------------------------------+
 // $Id: pm2checkout.php,v 1.0.1 2004/04/22 17:45:00 networkdad Exp $
-// Updated: Craig christenson 07/2012
+// Updated: Craig christenson 01/2013
 
 class as2checkout extends base {
     var $code, $title, $description, $enabled;
@@ -122,22 +122,22 @@ class as2checkout extends base {
     function check_coupons() {
         global $order, $currency, $db, $currencies;
 
-            $sql = "select * from " . TABLE_COUPONS . " where coupon_id=:couponID: and coupon_active='Y' ";
-            $sql = $db->bindVars($sql, ':couponID:', $_SESSION['cc_id'], 'integer');
-            $coupon = $db->Execute($sql);
-            $coupon_amount = $coupon->fields['coupon_amount'];
-            $coupon_amount_formatted = number_format($coupon_amount, 2, '.', '');
-            $coupon_result = 0;
+        $sql = "select * from " . TABLE_COUPONS . " where coupon_id=:couponID: and coupon_active='Y' ";
+        $sql = $db->bindVars($sql, ':couponID:', $_SESSION['cc_id'], 'integer');
+        $coupon = $db->Execute($sql);
+        $coupon_amount = $coupon->fields['coupon_amount'];
+        $coupon_amount_formatted = number_format($coupon_amount, 2, '.', '');
+        $coupon_result = 0;
 
-            switch ($coupon->fields['coupon_type']){
-                case 'P': // percentage
-                    $coupon_result = $coupon_amount_formatted*0.01*($order->info['subtotal']);
-                    break;
-                case 'F': // exact value
-                    $coupon_result = $coupon_amount_formatted;
-                    break;
-            }
-            return $coupon_result;
+        switch ($coupon->fields['coupon_type']){
+            case 'P': // percentage
+                $coupon_result = $coupon_amount_formatted*0.01*($order->info['subtotal']);
+                break;
+            case 'F': // exact value
+                $coupon_result = $coupon_amount_formatted;
+                break;
+        }
+        return $coupon_result;
     }
 
 
@@ -145,82 +145,82 @@ class as2checkout extends base {
         global $order, $currency, $db, $currencies;
 
         $process_button_string_lineitems;
-            $products = $order->products;
-            $process_button_string_lineitems .= zen_draw_hidden_field('mode', '2CO');
-            for ($i = 0; $i < sizeof($products); $i++) {
-                $prod_array = explode(':', $products[$i]['id']);
-                $product_id = $prod_array[0];
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i + 1) . '_quantity', $products[$i]['qty']);
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i + 1) . '_name', $products[$i]['name']);
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i + 1) . '_description', $products[$i]['model']);
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i + 1) . '_price', number_format(($currencies->get_value($order->info['currency']) * $products[$i]['final_price']), 2, '.', ''));
-            }
-            //shipping
-            if ($order->info['shipping_method'] && $order->info['shipping_cost'] > 0) {
-                $i++;
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_type', 'shipping');
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_name', $order->info['shipping_method']);
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_price', number_format(($currencies->get_value($order->info['currency']) * $order->info['shipping_cost']), 2, '.', ''));
-            }
-            //tax
-            if ($order->info['tax'] > 0) {
-                $i++;
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_type', 'tax');
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_name', 'Tax');
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_price', number_format(($currencies->get_value($order->info['currency']) * $order->info['tax']), 2, '.', ''));
-            }
-            //coupons
-            $coupon_result = $this->check_coupons();
-            if ($coupon_result > 0 ) {
-                $i++;
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_type', 'coupon');
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_name', $order->info['coupon_code']);
-                $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_price', number_format(($currencies->get_value($order->info['currency']) * $coupon_result), 2, '.', ''));
-            }
+        $products = $order->products;
+        $process_button_string_lineitems .= zen_draw_hidden_field('mode', '2CO');
+        for ($i = 0; $i < sizeof($products); $i++) {
+            $prod_array = explode(':', $products[$i]['id']);
+            $product_id = $prod_array[0];
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i + 1) . '_quantity', $products[$i]['qty']);
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i + 1) . '_name', $products[$i]['name']);
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i + 1) . '_description', $products[$i]['model']);
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i + 1) . '_price', number_format(($currencies->get_value($order->info['currency']) * $products[$i]['final_price']), 2, '.', ''));
+        }
+        //shipping
+        if ($order->info['shipping_method'] && $order->info['shipping_cost'] > 0) {
+            $i++;
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_type', 'shipping');
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_name', $order->info['shipping_method']);
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_price', number_format(($currencies->get_value($order->info['currency']) * $order->info['shipping_cost']), 2, '.', ''));
+        }
+        //tax
+        if ($order->info['tax'] > 0) {
+            $i++;
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_type', 'tax');
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_name', 'Tax');
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_price', number_format(($currencies->get_value($order->info['currency']) * $order->info['tax']), 2, '.', ''));
+        }
+        //coupons
+        $coupon_result = $this->check_coupons();
+        if ($coupon_result > 0 ) {
+            $i++;
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_type', 'coupon');
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_name', $order->info['coupon_code']);
+            $process_button_string_lineitems .= zen_draw_hidden_field('li_' . ($i) . '_price', number_format(($currencies->get_value($order->info['currency']) * $coupon_result), 2, '.', ''));
+        }
 
-            return $process_button_string_lineitems;
+        return $process_button_string_lineitems;
     }
 
     function third_party_cart($merchant_order_id) {
         global $order, $currency, $db, $currencies;
 
         $process_button_string_cprod;
-            $products = $order->products;
-            $process_button_string_cprod .= zen_draw_hidden_field('id_type', '1');
-            $process_button_string_cprod .= zen_draw_hidden_field('total', number_format(($currencies->get_value($order->info['currency']) * $order->info['total']), 2, '.', ''));
-            $process_button_string_cprod .= zen_draw_hidden_field('cart_order_id', $merchant_order_id);
-            for ($i = 0; $i < sizeof($products); $i++) {
-                $prod_array = explode(':', $products[$i]['id']);
-                $product_id = $prod_array[0];
-                $process_button_string_cprod .= zen_draw_hidden_field('c_prod_' . ($i + 1), $product_id . ',' . $products[$i]['qty']);
-                $process_button_string_cprod .= zen_draw_hidden_field('c_name_' . ($i + 1), $products[$i]['name']);
-                $process_button_string_cprod .= zen_draw_hidden_field('c_description_' . ($i + 1), $products[$i]['model']);
-                $process_button_string_cprod .= zen_draw_hidden_field('c_price_' . ($i + 1), number_format(($currencies->get_value($order->info['currency']) * $products[$i]['final_price']), 2, '.', ''));
-            }
-            return $process_button_string_cprod;
+        $products = $order->products;
+        $process_button_string_cprod .= zen_draw_hidden_field('id_type', '1');
+        $process_button_string_cprod .= zen_draw_hidden_field('total', number_format(($currencies->get_value($order->info['currency']) * $order->info['total']), 2, '.', ''));
+        $process_button_string_cprod .= zen_draw_hidden_field('cart_order_id', $merchant_order_id);
+        for ($i = 0; $i < sizeof($products); $i++) {
+            $prod_array = explode(':', $products[$i]['id']);
+            $product_id = $prod_array[0];
+            $process_button_string_cprod .= zen_draw_hidden_field('c_prod_' . ($i + 1), $product_id . ',' . $products[$i]['qty']);
+            $process_button_string_cprod .= zen_draw_hidden_field('c_name_' . ($i + 1), $products[$i]['name']);
+            $process_button_string_cprod .= zen_draw_hidden_field('c_description_' . ($i + 1), $products[$i]['model']);
+            $process_button_string_cprod .= zen_draw_hidden_field('c_price_' . ($i + 1), number_format(($currencies->get_value($order->info['currency']) * $products[$i]['final_price']), 2, '.', ''));
+        }
+        return $process_button_string_cprod;
     }
 
     function check_total() {
         global $order, $currency, $db, $currencies;
         $lineitem_total = 0;
         $products = $order->products;
-            for ($i = 0; $i < sizeof($products); $i++) {
-                    $lineitem_total += $products[$i]['qty'] * number_format(($currencies->get_value($order->info['currency']) * $products[$i]['final_price']), 2, '.', '');
-            }
-            //shipping
-            if ($order->info['shipping_method']) {
-                $lineitem_total += number_format(($currencies->get_value($order->info['currency']) * $order->info['shipping_cost']), 2, '.', '');
-            }
-            //tax
-            if ($order->info['tax'] > 0) {
-                $lineitem_total += number_format(($currencies->get_value($order->info['currency']) * $order->info['tax']), 2, '.', '');
-            }
-            //coupons
-            $coupon_result = $this->check_coupons();
-            if ($coupon_result > 0) {
-                $lineitem_total -= number_format(($currencies->get_value($order->info['currency']) * $coupon_result), 2, '.', '');
-            }
-            return $lineitem_total;
+        for ($i = 0; $i < sizeof($products); $i++) {
+                $lineitem_total += $products[$i]['qty'] * number_format(($currencies->get_value($order->info['currency']) * $products[$i]['final_price']), 2, '.', '');
+        }
+        //shipping
+        if ($order->info['shipping_method']) {
+            $lineitem_total += number_format(($currencies->get_value($order->info['currency']) * $order->info['shipping_cost']), 2, '.', '');
+        }
+        //tax
+        if ($order->info['tax'] > 0) {
+            $lineitem_total += number_format(($currencies->get_value($order->info['currency']) * $order->info['tax']), 2, '.', '');
+        }
+        //coupons
+        $coupon_result = $this->check_coupons();
+        if ($coupon_result > 0) {
+            $lineitem_total -= number_format(($currencies->get_value($order->info['currency']) * $coupon_result), 2, '.', '');
+        }
+        return $lineitem_total;
     }
 
     function process_button() {
@@ -244,7 +244,7 @@ class as2checkout extends base {
         //Get Tax Value
         $tax = $order->info['tax'];
 
-    //Get State
+        //Get State
         $country = $order->customer['country']['title'];
 
         switch ($country) {
@@ -271,16 +271,25 @@ class as2checkout extends base {
                             zen_draw_hidden_field('zip', $order->customer['postcode']) .
                             zen_draw_hidden_field('country', $order->customer['country']['title']) .
                             zen_draw_hidden_field('email', $order->customer['email_address']) .
-                            zen_draw_hidden_field('phone', $order->customer['telephone']) .
+                            zen_draw_hidden_field('phone', $order->customer['telephone']);
+
+
+        if (isset($order->delivery)) {
+            $process_button_string .= zen_draw_hidden_field('sid', MODULE_PAYMENT_2CHECKOUT_LOGIN) .
+                            zen_draw_hidden_field('merchant_order_id', $new_order_ref) .
                             zen_draw_hidden_field('ship_name', $order->delivery['firstname'] . " " . $order->delivery['lastname']) .
                             zen_draw_hidden_field('ship_street_address', $order->delivery['street_address']) .
                             zen_draw_hidden_field('ship_street_address2', $order->delivery['suburb']) .
                             zen_draw_hidden_field('ship_city', $order->delivery['city']) .
                             zen_draw_hidden_field('ship_state', $order->delivery['state']) .
                             zen_draw_hidden_field('ship_zip', $order->delivery['postcode']) .
-                            zen_draw_hidden_field('ship_country', $order->delivery['country']['title']) .
-                            zen_draw_hidden_field('2co_cart_type', 'Zen Cart') .
-                            zen_draw_hidden_field('2co_tax', number_format($tax, 2, '.', ''));
+                            zen_draw_hidden_field('ship_country', $order->delivery['country']['title']);
+        }
+
+        $process_button_string .= zen_draw_hidden_field('2co_cart_type', 'Zen Cart') .
+                            zen_draw_hidden_field('2co_tax', number_format($tax, 2, '.', '')) .
+                            zen_draw_hidden_field('purchase_step', 'payment-method');
+
         if (ENABLE_SSL != 'false') {
             $process_button_string .= zen_draw_hidden_field('fixed', 'Y') .
                                 zen_draw_hidden_field('x_receipt_link_url', HTTPS_SERVER . DIR_WS_CATALOG . 'process_2checkout.php');
@@ -303,6 +312,7 @@ class as2checkout extends base {
         } else {
             $process_button_string .= $this->third_party_cart($new_order_ref);
         }
+
         return $process_button_string;
     }
 
@@ -317,9 +327,9 @@ class as2checkout extends base {
     function before_process() {
         global $_POST, $db, $order, $messageStack, $_GET;
 
-	$check_return = $db->Execute("select status from " . TABLE_2CHECKOUT . " where 2co_id = '" . zen_db_prepare_input($_GET['cID']) . "' order by 2co_id desc limit 1");
+	   $check_return = $db->Execute("select status from " . TABLE_2CHECKOUT . " where 2co_id = '" . zen_db_prepare_input($_GET['cID']) . "' order by 2co_id desc limit 1");
 
-	switch ($check_return->fields['status']) {
+    	switch ($check_return->fields['status']) {
             case 'Y':
                 return true;
                 break;
@@ -333,12 +343,13 @@ class as2checkout extends base {
                 $messageStack->add_session('checkout_payment', MODULE_PAYMENT_2CHECKOUT_TEXT_ERROR_MESSAGE, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL', true, false));
                 break;
-	}
+    	}
     }
 
-  function after_process() {
-	return false;
-  }
+    function after_process() {
+	    return false;
+    }
+
 ////////////////////////////////////////////////////
 // If an error occurs with the process, output error messages here
 ////////////////////////////////////////////////////
@@ -357,9 +368,8 @@ class as2checkout extends base {
 // TABLES: configuration
 ////////////////////////////////////////////////////
 
-
     function check() {
-	global $db;
+	    global $db;
 
         if (!isset($this->_check)) {
             $check_query =  $db->Execute("select configuration_value from " . TABLE_CONFIGURATION . " where configuration_key = 'MODULE_PAYMENT_2CHECKOUT_STATUS'");
@@ -401,15 +411,15 @@ class as2checkout extends base {
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Secret Word', 'MODULE_PAYMENT_2CHECKOUT_SECRET_WORD', 'secret', 'Secret word for the 2CheckOut MD5 hash facility', '6', '9', now())");
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Multi-Currency Pricing', 'MODULE_PAYMENT_2CHECKOUT_CONVERSION', 'Yes', 'If you have more than 1 currency enabled on your store, this should be set to Yes. Please note: This feature uses the currency_code parameter to override your 2Checkout account level currency for each sale.', '6', '10', 'zen_cfg_select_option(array(\'Yes\', \'No\'), ', now())");
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Pass Through Products', 'MODULE_PAYMENT_2CHECKOUT_PRODUCTS', 'Enabled', 'This will enable the Pass Through Product parameter set to cleanly display lineitems on the 2Checkout custom checkout page.', '6', '10', 'zen_cfg_select_option(array(\'Enabled\', \'Disabled\'), ', now())");
-        }
+    }
 
     ////////////////////////////////////////////////////
     // Remove the module (Administration Tool)
     // TABLES: configuration
-////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
 
     function remove() {
-	global $db;
+	    global $db;
 
         define('TABLE_2CHECKOUT', DB_PREFIX.'2checkout');
         $db->Execute("delete from " . TABLE_CONFIGURATION . " where configuration_key in ('" . implode("', '", $this->keys()) . "')");
@@ -434,5 +444,7 @@ class as2checkout extends base {
                     'MODULE_PAYMENT_2CHECKOUT_PRODUCTS'
                 );
     }
+
 }
+
 ?>
