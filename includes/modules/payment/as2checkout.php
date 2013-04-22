@@ -37,7 +37,7 @@ class as2checkout extends base {
         $this->enabled = ((MODULE_PAYMENT_2CHECKOUT_STATUS == 'True') ? true : false);
         $this->secret_word = MODULE_PAYMENT_2CHECKOUT_SECRET_WORD;
         $this->login_id = MODULE_PAYMENT_2CHECKOUT_LOGIN;
-        $this->form_action_url = 'https://www.2checkout.com/checkout/spurchase';
+        $this->form_action_url = 'https://beta.2checkout.com/checkout/purchase';
 
         if ((int)MODULE_PAYMENT_2CHECKOUT_ORDER_STATUS_ID > 0) {
             $this->order_status = MODULE_PAYMENT_2CHECKOUT_ORDER_STATUS_ID;
@@ -111,6 +111,9 @@ class as2checkout extends base {
 
     function confirmation() {
         global $_POST;
+        if (MODULE_PAYMENT_2CHECKOUT_DIRECT == 'Direct') {
+            echo '<script src="https://beta.2checkout.com/static/checkout/javascript/direct.js"></script>';
+        }
         $confirmation = array('title' => $title);
         return $confirmation;
     }
@@ -403,6 +406,7 @@ class as2checkout extends base {
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable 2CheckOut Module', 'MODULE_PAYMENT_2CHECKOUT_STATUS', 'True', 'Do you want to accept 2CheckOut payments?', '6', '1', 'zen_cfg_select_option(array(\'True\', \'False\'), ', now())");
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Login/Store Number', 'MODULE_PAYMENT_2CHECKOUT_LOGIN', '000000', 'Your 2Checkout Seller ID.', '6', '2', now())");
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Transaction Mode', 'MODULE_PAYMENT_2CHECKOUT_TESTMODE', 'Test', 'Transaction mode used for the 2Checkout service', '6', '3', 'zen_cfg_select_option(array(\'Test\', \'Production\'), ', now())");
+        $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Checkout Mode', 'MODULE_PAYMENT_2CHECKOUT_DIRECT', 'Direct', 'Use Direct or Dynamic Checkout', '6', '3', 'zen_cfg_select_option(array(\'Direct\', \'Dynamic\'), ', now())");
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Merchant Notifications', 'MODULE_PAYMENT_2CHECKOUT_EMAIL_MERCHANT', 'True', 'Should 2CheckOut e-mail a receipt to the store owner?', '6', '4', 'zen_cfg_select_option(array(\'True\', \'False\'), ', now())");
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort order of display.', 'MODULE_PAYMENT_2CHECKOUT_SORT_ORDER', '0', 'Sort order of display. Lowest is displayed first.', '6', '5', now())");
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Payment Zone', 'MODULE_PAYMENT_2CHECKOUT_ZONE', '0', 'If a zone is selected, only enable this payment method for that zone.', '6', '6', 'zen_get_zone_class_title', 'zen_cfg_pull_down_zone_classes(', now())");
@@ -434,6 +438,7 @@ class as2checkout extends base {
                     'MODULE_PAYMENT_2CHECKOUT_LOGIN',
                     'MODULE_PAYMENT_2CHECKOUT_CURRENCY',
                     'MODULE_PAYMENT_2CHECKOUT_TESTMODE',
+                    'MODULE_PAYMENT_2CHECKOUT_DIRECT',
                     'MODULE_PAYMENT_2CHECKOUT_EMAIL_MERCHANT',
                     'MODULE_PAYMENT_2CHECKOUT_ZONE',
                     'MODULE_PAYMENT_2CHECKOUT_ORDER_STATUS_ID',
