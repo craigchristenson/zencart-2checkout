@@ -37,7 +37,7 @@ class as2checkout extends base {
         $this->enabled = ((MODULE_PAYMENT_2CHECKOUT_STATUS == 'True') ? true : false);
         $this->secret_word = MODULE_PAYMENT_2CHECKOUT_SECRET_WORD;
         $this->login_id = MODULE_PAYMENT_2CHECKOUT_LOGIN;
-        $this->form_action_url = 'https://beta.2checkout.com/checkout/purchase';
+        $this->form_action_url = 'https://www.2checkout.com/checkout/purchase';
 
         if ((int)MODULE_PAYMENT_2CHECKOUT_ORDER_STATUS_ID > 0) {
             $this->order_status = MODULE_PAYMENT_2CHECKOUT_ORDER_STATUS_ID;
@@ -112,7 +112,7 @@ class as2checkout extends base {
     function confirmation() {
         global $_POST;
         if (MODULE_PAYMENT_2CHECKOUT_DIRECT == 'Direct') {
-            echo '<script src="https://beta.2checkout.com/static/checkout/javascript/direct.js"></script>';
+            echo '<script src="https://www.2checkout.com/static/checkout/javascript/direct.min.js"></script>';
         }
         $confirmation = array('title' => $title);
         return $confirmation;
